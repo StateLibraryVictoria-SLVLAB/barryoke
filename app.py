@@ -26,6 +26,9 @@ def convert_audio(audio_input):
     return sample_rate,  sample_array
 
 def transcribe(audio_input):
+    print('Here we go')
+
+    transcription = 'Default value'
 
     try:
 
@@ -41,6 +44,7 @@ def transcribe(audio_input):
         transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)
 
     except Exception as e:
+        print(f"An error occurred: {e}")
         gr.Error(f"An error occurred: {e}")
 
     return transcription
