@@ -34,6 +34,8 @@ def chunks_to_srt(chunks):
 
 def transcribe(inputs, task, return_timestamps, language):
 
+    placeholder = 'Placeholder'
+
     print(f"Input type: {type(inputs)}")
     try:
         if inputs is None:
@@ -45,15 +47,15 @@ def transcribe(inputs, task, return_timestamps, language):
         result = pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": f"<|{language_code}|>"}, return_timestamps=return_timestamps)
         
         if return_timestamps:
-            return chunks_to_srt(result['chunks'])
+            return chunks_to_srt(result['chunks']), placeholder
         else:
-            return result['text']
+            return result['text'], placeholder
         
     except Exception as e:
 
         print(f"Error - {e}")
 
-        return e
+        return e, placeholder
 
 
 # def convert_audio(audio_input):
