@@ -35,18 +35,25 @@ def chunks_to_srt(chunks):
 def transcribe(inputs, task, return_timestamps, language):
 
     print(f"Input type: {type(inputs)}")
-    if inputs is None:
-        raise gr.Error("No audio file submitted! Please upload or record an audio file before submitting your request.")
-    
-    # Map the language names to their corresponding codes
-    language_codes = {"English": "en", "Korean": "ko", "Japanese": "ja"}
-    language_code = language_codes.get(language, "en")  # Default to "en" if the language is not found
-    result = pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": f"<|{language_code}|>"}, return_timestamps=return_timestamps)
-    
-    if return_timestamps:
-        return chunks_to_srt(result['chunks'])
-    else:
-        return result['text']
+    try:
+        if inputs is None:
+            raise gr.Error("No audio file submitted! Please upload or record an audio file before submitting your request.")
+        
+        # Map the language names to their corresponding codes
+        language_codes = {"English": "en", "Korean": "ko", "Japanese": "ja"}
+        language_code = language_codes.get(language, "en")  # Default to "en" if the language is not found
+        result = pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": f"<|{language_code}|>"}, return_timestamps=return_timestamps)
+        
+        if return_timestamps:
+            return chunks_to_srt(result['chunks'])
+        else:
+            return result['text']
+        
+    except Exception as e:
+
+        print(f"Error - {e}")
+
+        return e
 
 
 # def convert_audio(audio_input):
@@ -107,7 +114,7 @@ with gr.Blocks() as demo:
     rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
 
     with gr.Row():
-        inp = gr.Audio(sources='microphone',waveform_options='recording'),
+        inp = gr.Audio(sources='microphone',type="filepath"),
         out_1 = gr.Textbox()
         out_2 = gr.Textbox()
     btn = gr.Button("Run")
