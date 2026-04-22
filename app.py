@@ -90,7 +90,7 @@ with gr.Blocks() as demo:
     rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
 
     with gr.Row():
-        inp = [gr.Audio(sources='microphone',type="filepath"),selected_quote],
+        mf_input = gr.Audio(sources='microphone',type="filepath"),
         
         out_1 = gr.HighlightedText(
             label="WhisperDiff",
@@ -106,6 +106,6 @@ with gr.Blocks() as demo:
             color_map={"+": "green", "-": "blue"}
             )
     btn = gr.Button("Run")
-    btn.click(fn=transcribe, inputs=inp, outputs=[out_1, out_2])
+    btn.click(fn=transcribe, inputs=[mf_input,selected_quote], outputs=[out_1, out_2])
 
 demo.launch()
