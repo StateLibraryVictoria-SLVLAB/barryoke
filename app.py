@@ -2,6 +2,7 @@ import gradio as gr
 import torch
 
 import random
+from difflib import Differ
 
 from transformers import pipeline
 
@@ -27,6 +28,13 @@ ft_pipe = pipeline(
     device=device,
 )
 
+def diff_texts(text1, text2):
+    d = Differ()
+    return [
+        (token[2:], token[0] if token[0] != " " else None)
+        for token in d.compare(text1, text2)
+    ]
+
 
 def transcribe(inputs, task='transcribe'):
 
@@ -39,7 +47,11 @@ def transcribe(inputs, task='transcribe'):
         
         ft_result = ft_pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": "en"})
 
-        return base_result['text'], ft_result['text']
+        base_diff_txt = diff_texts('base line',base_result['text'])
+
+        ft_diff_text = diff_texts('fine tune',ft_result['text'])
+
+        return base_diff_txt, ft_diff_text
         
     except Exception as e:
 
@@ -61,6 +73,12 @@ def select_quote():
 
     return barry_quotes[rand_idx]
 
+diff_out = gr.HighlightedText(
+        label="Diff",
+        combine_adjacent=True,
+        show_legend=True,
+        color_map={"+": "red", "-": "green"})
+
 
 with gr.Blocks() as demo:
 
@@ -72,8 +90,8 @@ with gr.Blocks() as demo:
 
     with gr.Row():
         inp = gr.Audio(sources='microphone',type="filepath"),
-        out_1 = gr.Textbox()
-        out_2 = gr.Textbox()
+        out_1 = diff_out
+        out_2 = diff_out
     btn = gr.Button("Run")
     btn.click(fn=transcribe, inputs=inp, outputs=[out_1, out_2])
 
