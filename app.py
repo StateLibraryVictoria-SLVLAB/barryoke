@@ -81,7 +81,7 @@ def select_quote():
 
     selected_quote = barry_quotes[rand_idx]
 
-    return barry_quotes[rand_idx]
+    return f'## *"{barry_quotes[rand_idx]}"*'
 
 descriptive_markdown = """
 # Barryoke
@@ -98,15 +98,16 @@ with gr.Blocks() as demo:
     gr.Markdown(descriptive_markdown)
 
     rand_btn = gr.Button("Pick a quote")
-    quote = gr.Textbox()
+    quote = gr.Markdown()
 
     rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
     
     # with gr.Row():
     mf_input = gr.Audio(sources='microphone',type="filepath"),
     
+    gr.Markdown(f'Output transcribed using {BASE_MODEL_NAME}')
     with gr.Row():
-        gr.Markdown(f'Output transcribed using {BASE_MODEL_NAME}')    
+
         out_1 = gr.Textbox()
         diff_out_1 = gr.HighlightedText(
             label="WhisperDiff",
@@ -114,9 +115,9 @@ with gr.Blocks() as demo:
             show_legend=True,
             color_map={"+": "green", "-": "blue"}
             )
-
+        
+    gr.Markdown(f'Output transcribed using {FT_MODEL_NAME}')
     with gr.Row():    
-        gr.Markdown(f'Output transcribed using {FT_MODEL_NAME}')
         out_2 = gr.Textbox()
         diff_out_2 = gr.HighlightedText(
             label="FinetuneDiff",
