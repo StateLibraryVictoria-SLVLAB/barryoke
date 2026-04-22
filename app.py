@@ -56,7 +56,7 @@ def transcribe(inputs, task='transcribe'):
 
         ft_diff_text = diff_texts(selected_quote,ft_result['text'])
 
-        return base_diff_txt, ft_diff_text
+        return base_result, base_diff_txt, ft_result, ft_diff_text
         
     except Exception as e:
 
@@ -83,34 +83,43 @@ def select_quote():
 
     return barry_quotes[rand_idx]
 
+descriptive_markdown = """
+# Barryoke
+
+Quotes taken from an address given by Sir Redmond Barry on the opening of the free public library of Ballarat East.
+
+See the full address here - [https://latrobejournal.slv.vic.gov.au/latrobejournal/issue/latrobe-26/t1-g-t3.html](https://latrobejournal.slv.vic.gov.au/latrobejournal/issue/latrobe-26/t1-g-t3.html)
+"""
 
 with gr.Blocks() as demo:
 
     selected_quote = gr.State([])
 
-    gr.Markdown("Barryoke")
+    gr.Markdown(descriptive_markdown)
     quote = gr.Textbox()
 
-    rand_btn = gr.Button("Quote")
+    rand_btn = gr.Button("Pick a quote")
     rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
 
     with gr.Row():
         mf_input = gr.Audio(sources='microphone',type="filepath"),
         
-        out_1 = gr.HighlightedText(
+        out_1 = gr.Textbox()
+        diff_out_1 = gr.HighlightedText(
             label="WhisperDiff",
             combine_adjacent=True,
             show_legend=True,
             color_map={"+": "green", "-": "blue"}
             )
         
-        out_2 = gr.HighlightedText(
+        out_2 = gr.Textbox()
+        diff_out_2 = gr.HighlightedText(
             label="FinetuneDiff",
             combine_adjacent=True,
             show_legend=True,
             color_map={"+": "green", "-": "blue"}
             )
     btn = gr.Button("Run")
-    btn.click(fn=transcribe, inputs=mf_input, outputs=[out_1, out_2])
+    btn.click(fn=transcribe, inputs=mf_input, outputs=[out_1, diff_out_1, out_2, diff_out_2])
 
 demo.launch()
