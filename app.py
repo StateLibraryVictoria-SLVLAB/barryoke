@@ -36,7 +36,7 @@ def diff_texts(text1, text2):
     ]
 
 
-def transcribe(inputs, selected_quote, task='transcribe'):
+def transcribe(inputs, selected_quote=selected_quote, task='transcribe'):
 
     print(f"selected_quote: {selected_quote}")
     
@@ -63,7 +63,7 @@ def transcribe(inputs, selected_quote, task='transcribe'):
 
 def select_quote():
 
-    
+    global selected_quote
 
     barry_quotes = [
     'this is a quote',  
@@ -106,6 +106,6 @@ with gr.Blocks() as demo:
             color_map={"+": "green", "-": "blue"}
             )
     btn = gr.Button("Run")
-    btn.click(fn=transcribe, inputs=[mf_input,selected_quote], outputs=[out_1, out_2])
+    btn.click(fn=transcribe, inputs=mf_input, outputs=[out_1, out_2])
 
 demo.launch()
