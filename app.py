@@ -36,7 +36,7 @@ def diff_texts(text1, text2):
     ]
 
 
-def transcribe(inputs, selected_quote=selected_quote, task='transcribe'):
+def transcribe(inputs, task='transcribe'):
 
     print(f"selected_quote: {selected_quote}")
     
