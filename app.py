@@ -103,7 +103,8 @@ with gr.Blocks() as demo:
 
     with gr.Row():
         mf_input = gr.Audio(sources='microphone',type="filepath"),
-        
+    
+    with gr.Row():    
         out_1 = gr.Textbox()
         diff_out_1 = gr.HighlightedText(
             label="WhisperDiff",
@@ -111,7 +112,8 @@ with gr.Blocks() as demo:
             show_legend=True,
             color_map={"+": "green", "-": "blue"}
             )
-        
+
+    with gr.Row():    
         out_2 = gr.Textbox()
         diff_out_2 = gr.HighlightedText(
             label="FinetuneDiff",
