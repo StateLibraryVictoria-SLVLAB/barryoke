@@ -30,6 +30,10 @@ ft_pipe = pipeline(
 
 def diff_texts(text1, text2):
     d = Differ()
+
+    text1 = text1.casefold()
+    text2 = text2.casefold()
+
     return [
         (token[2:], token[0] if token[0] != " " else None)
         for token in d.compare(text1, text2)
@@ -66,10 +70,11 @@ def select_quote():
     global selected_quote
 
     barry_quotes = [
-    'this is a quote',  
-    'this is another one',  
-    'one more',  
-    'not a quote',  
+    'The hours of labor reduced to eight, leave to artisans, tradesmen, and other dwellers in towns a vary large portion of the remainder of the twenty-four virtually unoccupied.',  
+    'How is this leisure to be disposed of? In the public-house? the singing hall? the dancing-saloon? which hold out seductions somewhat more dangerous, methinks, to honest labor than those presented by a library;',  
+    'We may well rejoice, then, when we see a room such as this filled with attentive and reflective readers.',  
+    'The insinuation of the waste of time in the perusal of unprofitable, trashy books must be met also by the enquiry — What does the expression mean?',
+    "Men's minds are not cast in one mould — what charms one may repel another — nor is one man's mind at all times in the same frame."  
     ]    
 
     rand_idx = random.randint(0,(len(barry_quotes) - 1))
