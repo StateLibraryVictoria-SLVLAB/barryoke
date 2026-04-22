@@ -48,9 +48,9 @@ def transcribe(inputs, task='transcribe'):
         
         ft_result = ft_pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": "en"})
 
-        base_diff_txt = diff_texts('base line',base_result['text'])
+        base_diff_txt = diff_texts(selected_quote,base_result['text'])
 
-        ft_diff_text = diff_texts('fine tune',ft_result['text'])
+        ft_diff_text = diff_texts(selected_quote,ft_result['text'])
 
         return base_diff_txt, ft_diff_text
         
