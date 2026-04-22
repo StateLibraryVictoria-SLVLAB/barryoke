@@ -36,9 +36,10 @@ def diff_texts(text1, text2):
     ]
 
 
-def transcribe(inputs, task='transcribe'):
+def transcribe(inputs, selected_quote, task='transcribe'):
 
-    placeholder = 'Placeholder'
+    print(f"selected_quote: {selected_quote}")
+    
     try:
         if inputs is None:
             raise gr.Error("No audio file submitted! Please upload or record an audio file before submitting your request.")
@@ -57,10 +58,12 @@ def transcribe(inputs, task='transcribe'):
 
         print(f"Error - {e}")
 
-        return e, placeholder
+        return e, ''
 
 
 def select_quote():
+
+    
 
     barry_quotes = [
     'this is a quote',  
@@ -71,10 +74,14 @@ def select_quote():
 
     rand_idx = random.randint(0,(len(barry_quotes) - 1))
 
+    selected_quote = barry_quotes[rand_idx]
+
     return barry_quotes[rand_idx]
 
 
 with gr.Blocks() as demo:
+
+    selected_quote = gr.State([])
 
     gr.Markdown("Barryoke")
     quote = gr.Textbox()
@@ -83,20 +90,20 @@ with gr.Blocks() as demo:
     rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
 
     with gr.Row():
-        inp = gr.Audio(sources='microphone',type="filepath"),
+        inp = [gr.Audio(sources='microphone',type="filepath"),selected_quote],
         
         out_1 = gr.HighlightedText(
-            label="Diff1",
+            label="WhisperDiff",
             combine_adjacent=True,
             show_legend=True,
-            color_map={"+": "red", "-": "green"}
+            color_map={"+": "green", "-": "blue"}
             )
         
         out_2 = gr.HighlightedText(
-            label="Diff2",
+            label="FinetuneDiff",
             combine_adjacent=True,
             show_legend=True,
-            color_map={"+": "red", "-": "green"}
+            color_map={"+": "green", "-": "blue"}
             )
     btn = gr.Button("Run")
     btn.click(fn=transcribe, inputs=inp, outputs=[out_1, out_2])
