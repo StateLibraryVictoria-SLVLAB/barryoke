@@ -104,6 +104,8 @@ with gr.Blocks() as demo:
     
     # with gr.Row():
     mf_input = gr.Audio(sources='microphone',type="filepath"),
+
+    btn = gr.Button("Transcribe")
     
     gr.Markdown(f'### Output transcribed using {BASE_MODEL_NAME}')
     with gr.Row():
@@ -125,7 +127,7 @@ with gr.Blocks() as demo:
             show_legend=True,
             color_map={"+": "green", "-": "blue"}
             )
-    btn = gr.Button("Run")
+    
     btn.click(fn=transcribe, inputs=mf_input, outputs=[out_1, diff_out_1, out_2, diff_out_2])
 
 demo.launch()
