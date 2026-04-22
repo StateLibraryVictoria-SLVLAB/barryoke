@@ -7,16 +7,22 @@ from transformers import pipeline
 
 
 BASE_MODEL_NAME = "openai/whisper-tiny"
-LAB_MODEL_NAME = ''
+FT_MODEL_NAME = "sotirios-slv/whisper-tiny-au-en"
 BATCH_SIZE = 8
 TASK = "automatic-speech-recognition"
 
 device = 0 if torch.cuda.is_available() else "cpu"
 
-
 pipe = pipeline(
     task=TASK,
     model=BASE_MODEL_NAME,
+    chunk_length_s=30,
+    device=device,
+)
+
+ft_pipe = pipeline(
+    task=TASK,
+    model=FT_MODEL_NAME,
     chunk_length_s=30,
     device=device,
 )
@@ -29,9 +35,11 @@ def transcribe(inputs, task='transcribe'):
         if inputs is None:
             raise gr.Error("No audio file submitted! Please upload or record an audio file before submitting your request.")
         
-        result = pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": "en"})
+        base_result = pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": "en"})
         
-        return result['text'], placeholder
+        ft_result = ft_pipe(inputs, batch_size=BATCH_SIZE, generate_kwargs={"task": task, "language": "en"})
+
+        return base_result['text'], ft_result['text']
         
     except Exception as e:
 
