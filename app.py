@@ -22,7 +22,7 @@ pipe = pipeline(
 )
 
 
-def transcribe(inputs, task=TASK):
+def transcribe(inputs, task='transcribe'):
 
     placeholder = 'Placeholder'
     try:
