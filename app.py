@@ -105,10 +105,10 @@ with gr.Blocks() as demo:
     # with gr.Row():
     mf_input = gr.Audio(sources='microphone',type="filepath"),
     
-    gr.Markdown(f'Output transcribed using {BASE_MODEL_NAME}')
+    gr.Markdown(f'### Output transcribed using {BASE_MODEL_NAME}')
     with gr.Row():
 
-        out_1 = gr.Textbox()
+        out_1 = gr.Textbox(label='Whisper transcription')
         diff_out_1 = gr.HighlightedText(
             label="WhisperDiff",
             combine_adjacent=True,
@@ -116,9 +116,9 @@ with gr.Blocks() as demo:
             color_map={"+": "green", "-": "blue"}
             )
         
-    gr.Markdown(f'Output transcribed using {FT_MODEL_NAME}')
+    gr.Markdown(f'### Output transcribed using {FT_MODEL_NAME}')
     with gr.Row():    
-        out_2 = gr.Textbox()
+        out_2 = gr.Textbox(label='Finetune transcription')
         diff_out_2 = gr.HighlightedText(
             label="FinetuneDiff",
             combine_adjacent=True,
