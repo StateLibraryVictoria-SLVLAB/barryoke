@@ -96,12 +96,11 @@ with gr.Blocks() as demo:
     selected_quote = gr.State([])
 
     gr.Markdown(descriptive_markdown)
-    
 
     rand_btn = gr.Button("Pick a quote")
-    rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
-
     quote = gr.Textbox()
+
+    rand_btn.click(fn=select_quote,inputs=[],outputs=quote)
     
     # with gr.Row():
     mf_input = gr.Audio(sources='microphone',type="filepath"),
