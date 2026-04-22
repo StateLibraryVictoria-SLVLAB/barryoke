@@ -73,12 +73,6 @@ def select_quote():
 
     return barry_quotes[rand_idx]
 
-diff_out = gr.HighlightedText(
-        label="Diff",
-        combine_adjacent=True,
-        show_legend=True,
-        color_map={"+": "red", "-": "green"})
-
 
 with gr.Blocks() as demo:
 
@@ -90,8 +84,20 @@ with gr.Blocks() as demo:
 
     with gr.Row():
         inp = gr.Audio(sources='microphone',type="filepath"),
-        out_1 = diff_out
-        out_2 = diff_out
+        
+        out_1 = gr.HighlightedText(
+            label="Diff1",
+            combine_adjacent=True,
+            show_legend=True,
+            color_map={"+": "red", "-": "green"}
+            )
+        
+        out_2 = gr.HighlightedText(
+            label="Diff2",
+            combine_adjacent=True,
+            show_legend=True,
+            color_map={"+": "red", "-": "green"}
+            )
     btn = gr.Button("Run")
     btn.click(fn=transcribe, inputs=inp, outputs=[out_1, out_2])
 
